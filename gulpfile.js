@@ -10,6 +10,7 @@ let
 	plumber =     require('gulp-plumber'),
 	csso =        require('gulp-csso'),
 	pug =         require('gulp-pug'),
+	gulpPHP =     require('gulp-connect-php'),
 	liveServer =  require('browser-sync')
 
 let sass = {
@@ -25,7 +26,8 @@ let uglify = {
 
 let
 	minifyJS = uglify.composer(uglify.core, console),
-	reloadServer = () => liveServer.stream()
+	reloadServer = () => liveServer.stream(),
+	phpServer = new gulpPHP()
 
 let dirs = {
 	dev: 'source',
@@ -38,7 +40,7 @@ let dirs = {
 let paths = {
 	panel: {
 		dev: [`${dirs.dev}/pug/**/*.pug`, `!${dirs.dev}/pug/inc/**/*.pug`],
-		prod: `${dirs.prod.build}/`
+		prod: dirs.prod.build
 	},
 	js: {
 		dev: `${dirs.dev}/js/**/*.js`,
@@ -51,11 +53,17 @@ let paths = {
 	}
 }
 
-gulp.task('liveReload', () => liveServer({
-	server: dirs.prod.build,
-	port: 8080,
-	notify: false
-}))
+gulp.task('local-php-server', () => {
+	phpServer.server({
+		base: dirs.prod.build,
+		port: 8081,
+		stdio: 'ignore'
+	}, () => liveServer({
+		proxy: 'localhost:8081',
+		notify: false,
+		port: 8080
+	}))
+})
 
 gulp.task('pug', () => tube([
 	watch(paths.panel.dev, { ignoreInitial: false }),
@@ -118,4 +126,4 @@ gulp.task('scss:dev', () => tube(
 ))
 
 gulp.task('default', ['pug', 'get-kamina', 'minify-js', 'scss:dev'])
-gulp.task('dev', ['liveReload', 'default'])
+gulp.task('dev', ['local-php-server', 'default'])

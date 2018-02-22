@@ -1,6 +1,8 @@
 |<?php
 |	date_default_timezone_set('Europe/Moscow');
 |	include_once '🤫/panel-core.php';
+|
+|	$isAdminUser = in_array($_SERVER['PHP_AUTH_USER'], $adminUsers);
 |?>
 doctype html
 html(lang='ru')
@@ -10,7 +12,7 @@ html(lang='ru')
 		- var subTitle = 'Panel'
 
 		meta(charset='utf-8')
-		title #{title} / #{subTitle}
+		title #{title.toUpperCase()} / #{subTitle}
 
 		| <?php if (isset($_GET['action'])) echo '
 		script document.location.href="'. $_SERVER['PHP_SELF'] .'"
@@ -24,8 +26,8 @@ html(lang='ru')
 
 		include inc/meta-font.pug
 
-		each CSS in ['nyan-every', 'admin-panel']
-			link(rel='stylesheet' href=`${PATHS.css}/${CSS}.min.css?v=${VERSION}`)
+		link(rel='stylesheet' href=`${URLs.same}/assets/css/nyan-every.min.css?v=2.3.1?v=${VERSION}`)
+		link(rel='stylesheet' href=`${PATHS.css}/admin-panel.min.css?v=${VERSION}`)
 	body
 		div.container
 			header.top-panel
@@ -69,12 +71,15 @@ html(lang='ru')
 					fieldset.rm-air
 						legend Удалить последний эфир из расписания
 						p
-							span Последний эфир: #[samp.info-anime]
+							span Последний эфир: #[samp.info]
 						p
 							label(for='rm_air_cnf') Вы точно этого хотите?
 							input#rm_air_cnf(name='rm_air_cnf' type='checkbox' required)
 						p.submit
 							input(name='rm_air' type='submit' value='Удалить')
+
+				| <?php if ($isAdminUser == true): ?>
+
 				form(action='?action' method='post')
 					fieldset.expired-clear
 						legend Удалить старые эфиры из расписания
@@ -84,6 +89,7 @@ html(lang='ru')
 							input#expire_chear_cnf(name='expire_chear_cnf' type='checkbox' required)
 						p.submit
 							input(name='expired_clear' type='submit' value='Удалить')
+
 				form(action='?action' method='post')
 					fieldset.noti
 						legend Работа с оповещением
@@ -108,46 +114,54 @@ html(lang='ru')
 					legend Обновление токена доступа ВК
 					p
 
+				| <?php endif ?>
+
 				footer.text-m
-					p Последнее обновление расписания /anime: #[span.tsAnime]
+					p Последнее обновление расписания: #[span.tsAnime]
 					p Последнее обновление оповещения: #[span.tsNoti]
 					p Московское время (на сервере): #[span.tsCurrent]
 
-		each lib in [`moment.js/${libsVer.moment.same}/moment.min.js`, `moment.js/${libsVer.moment.same}/locale/ru.js`, `moment-timezone/${libsVer.moment.timezone}/moment-timezone-with-data.min.js`]
-			script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` defer)
+		+libFromCDN(`moment.js/${libsVer.moment.same.v}/moment.min.js`, libsVer.moment.same.sri)
+		+libFromCDN(`moment.js/${libsVer.moment.same.v}/locale/ru.js`, libsVer.moment.same.sriLocale)
+		+libFromCDN(`moment-timezone/${libsVer.moment.timezone.v}/moment-timezone-with-data.min.js`, libsVer.moment.timezone.sri)
 
 		each JS in ['kamina', 'admin-panel']
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
-		|<?php $PHP_data = [
-		|	'timezone' => date_default_timezone_get(),
-		|	'sched' => [
-		|		'count' => $schedAnime_count,
-		|		'countExpr' => countExprs($schedAnime_data_tmp),
-		|		'latest' => [
-		|			'is' => $schedAnime_latest ? true : false,
-		|			'title' => $schedAnime_latest ? $schedAnime_latest['title'] : '',
-		|			'start' => $schedAnime_latest ? $schedAnime_latest['s'] : null,
-		|			'end' => $schedAnime_latest ? $schedAnime_latest['e'] : null,
+		|<?php
+		|	$PHP_data = [
+		|		'timezone' => date_default_timezone_get(),
+		|		'user' => $isAdminUser,
+		|		'sched' => [
+		|			'count' => $schedAnime_count,
+		|			'countExpr' => countExprs($schedAnime_data_tmp),
+		|			'latest' => [
+		|				'is' => $schedAnime_latest ? true : false,
+		|				'title' => $schedAnime_latest ? $schedAnime_latest['title'] : '',
+		|				'start' => $schedAnime_latest ? $schedAnime_latest['s'] : null,
+		|				'end' => $schedAnime_latest ? $schedAnime_latest['e'] : null,
+		|			]
+		|		],
+		|		'ts' => [
+		|			'anime' => filemtime($file['sched']),
+		|			'noti' => filemtime($file['noti']),
+		|			'current' => time()
 		|		]
-		|	],
-		|	'noti' => [
-		|		'enabled' => $noti_data['enabled'],
-		|		'text' => $noti_data['text'] ? $noti_data['text'] : '',
-		|		'color' => isset($noti_data['color']) ? $noti_data['color'] : false
-		|	],
-		|	'vk' => [
-		|		'URL' => $APIep['vk_au'],
-		|		'appID' => $vkData['id'],
-		|		'api' => 'api-backend-vk.php'
-		|	],
-		|	'server' => $_SERVER['SERVER_NAME'],
-		|	'ts' => [
-		|		'anime' => filemtime($file['sched']),
-		|		'noti' => filemtime($file['noti']),
-		|		'current' => time()
-		|	]
-		|]; ?>
+		|	];
+		|	if ($isAdminUser) {
+		|		$PHP_data['noti'] = [
+		|			'enabled' => $noti_data['enabled'],
+		|			'text' => $noti_data['text'] ? $noti_data['text'] : '',
+		|			'color' => isset($noti_data['color']) ? $noti_data['color'] : false
+		|		];
+		|		$PHP_data['vk'] = [
+		|			'URL' => $APIep['vk_au'],
+		|			'appID' => $vkData['id'],
+		|			'api' => 'api-backend-vk.php'
+		|		];
+		|		$PHP_data['server'] = $_SERVER['SERVER_NAME'];
+		|	}
+		|?>
 
 		script
 			|<?php echo "document.addEventListener('DOMContentLoaded', () => { initAdminPanel(" . json_encode($PHP_data, JSON_UNESCAPED_UNICODE) . ") })" ?>

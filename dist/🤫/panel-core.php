@@ -1,5 +1,5 @@
 <?php
-	include 'vars.php';
+	include 'config.php';
 
 	$file = [
 		'sched' =>  'api/sched.json',

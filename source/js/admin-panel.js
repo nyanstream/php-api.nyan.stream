@@ -10,16 +10,8 @@ var initAdminPanel = data => {
 
 	try {
 		let
-			needChangeTime = (data.sched.anime.count > 0) ? 'true' : 'false',
-			newTime = data.sched.anime.latest.end
-
-		if ($make.qs('input[name="where"]')) {
-			Array.from($make.qs('input[name="where"]', ['a'])).forEach(input => {
-				input.addEventListener('change', e => {
-					$make.qs('.add-air-as-backup').style.display = (e.target.value == 'anime') ? null : 'none'
-				})
-			})
-		}
+			needChangeTime = (data.sched.count > 0) ? 'true' : 'false',
+			newTime = data.sched.latest.end
 
 		if (needChangeTime) {
 			$make.qs('.add-air input[type*=datetime]').setAttribute('value', moment.unix(newTime).format('YYYY-MM-DDTHH:mm'))
@@ -27,51 +19,37 @@ var initAdminPanel = data => {
 	} catch (e) { }
 
 	try {
-		let
-			animeInfoEl = $make.qs('.rm-air .info-anime'),
-			radioInfoEl = $make.qs('.rm-air .info-radio')
+		let infoEl = $make.qs('.rm-air .info')
 
 		let emptySched = {
-			anime: (animeInfoEl && data.sched.anime.count == 0) ? true : false,
-			radio: (radioInfoEl && data.sched.radio.count == 0) ? true : false
+			anime: (infoEl && data.sched.count == 0) ? true : false
 		}
 
-		if (animeInfoEl) {
-			if (data.sched.anime.count > 0 && animeInfoEl) {
-				animeInfoEl.innerHTML = `Название: <q>${data.sched.anime.latest.title}</q>. Начало ${moment.unix(data.sched.anime.latest.start).format('LLL')}; Конец: ${moment.unix(data.sched.anime.latest.end).format('LLL')}`
-			} else { animeInfoEl.textContent = 'Расписание пустое' }
-		}
-
-		if (radioInfoEl) {
-			if (data.sched.radio.count > 0) {
-				radioInfoEl.innerHTML = `Название: <q>${data.sched.radio.latest.title}</q>. Начало ${moment.unix(data.sched.radio.latest.start).format('LLL')}; Конец: ${moment.unix(data.sched.radio.latest.end).format('LLL')}`
-			} else { radioInfoEl.textContent = 'Расписание пустое' }
-		}
-
-		Object.keys(emptySched).forEach(key => {
-			if (emptySched[key]) { $make.qs(`.rm-air input[type="radio"][value="${key}"]`).setAttribute('disabled', '') }
-		})
+		infoEl.innerHTML = (data.sched.count > 0 && infoEl)
+			? `Название: <q>${data.sched.latest.title}</q>. Начало ${moment.unix(data.sched.latest.start).format('LLL')}; Конец: ${moment.unix(data.sched.latest.end).format('LLL')}`
+			: 'Расписание пустое'
 
 		let
 			schedsNames = Object.keys(emptySched),
 			emptyScheds = schedsNames.filter(key => emptySched[key] == true)
 
 		if (schedsNames.length == emptyScheds.length) {
-			Array.from($make.qs('.rm-air input', ['a'])).forEach(input => { input.setAttribute('disabled', '') })
+			Array.from($make.qs('.rm-air input', ['a'])).forEach(input => {
+				input.setAttribute('disabled', '')
+			})
 		}
 	} catch (e) { }
 
 	try {
 		let exprsSched = {
-			anime: data.sched.anime.countExpr,
-			radio: data.sched.radio.countExpr
+			anime: data.sched.countExpr
 		}
 
 		if (!$make.qs('.expired-clear')) { throw 42 }
 
-		$make.qs('.expired-clear .count').innerHTML = `Всего просроченных эфиров: ${exprsSched['anime'] + exprsSched['radio']}; ${exprsSched['anime']} в /anime, ${exprsSched['radio']} в /radio.`
+		$make.qs('.expired-clear .count').innerHTML = `Всего просроченных эфиров: ${exprsSched['anime']}.`
 
-		if (exprsSched['anime'] + exprsSched['radio'] == 0) {
+		if (exprsSched['anime'] == 0) {
 			Array.from($make.qs('.expired-clear input', ['a'])).forEach(input => {
 				input.setAttribute('disabled', '')
 			})

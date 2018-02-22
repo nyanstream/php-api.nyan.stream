@@ -2,7 +2,7 @@
 	date_default_timezone_set('Europe/Moscow');
 	error_reporting(0);
 
-	include '🤫/vars.php';
+	include '🤫/config.php';
 
 	/*
 	 * Прокси для картинок с VK, используемых в виджете с новостями

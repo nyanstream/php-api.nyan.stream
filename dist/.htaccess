@@ -1,16 +1,41 @@
 # Кодировка
+
 AddDefaultCharset utf-8
 
 # Запрет на просмотр директорий
+
 Options All -Indexes
 
 # Форсированный HTTPS
+
 RewriteEngine on
 RewriteCond %{HTTPS} !on
 RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
 
 # Рерайт всех .json
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.json -f
 RewriteRule ^(.+)$ $1.json [L,QSA]
+
+# Аутентификация
+
+<files 🤔-panel.php>
+	AuthType Digest
+	AuthName 'Green Hill Zone'
+	AuthUserFile /home/www/id0336/data/nyan_panel/suka.passwd
+	Require valid-user
+</files>
+
+# Content Security Policy
+
+<IfModule mod_headers.c>
+Header set Strict-Transport-Security 'max-age=31536000; includeSubDomains; preload' env=HTTPS
+
+Header set Content-Security-Policy "default-src 'self'; \
+ style-src 'self' 'unsafe-inline' https://nyan.stream https://fonts.googleapis.com; \
+ font-src 'self' https://fonts.gstatic.com; \
+ img-src 'self' data: https://nyan.stream; \
+ script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com"
+</IfModule>

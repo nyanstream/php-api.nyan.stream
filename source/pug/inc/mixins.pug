@@ -4,3 +4,6 @@ mixin headerBrand(subTitle)
 		a.brand__text(href='/' rel='home')
 			span.brand__text--title #{title}
 			span.brand__text--subtitle #{subTitle}
+
+mixin libFromCDN(lib, hash)
+	script(src=`https://cdnjs.cloudflare.com/ajax/libs/${lib}` crossorigin='anonymous' integrity=`${hash}` defer)

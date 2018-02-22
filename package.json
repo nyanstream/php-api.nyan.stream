@@ -2,7 +2,7 @@
 	"name": "php-api.nyan.stream",
 	"description": "",
 	"private": true,
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"author": "Dmitry <dmitry@cojam.ru> (https://e965.ru)",
 	"repository": "bitbucket:ruLait/php-api.nyan.stream",
 	"license": "MIT",
