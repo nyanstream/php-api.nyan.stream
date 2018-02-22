@@ -1,0 +1,128 @@
+.top-panel {
+	@include flexbox(auto, center, center, auto);
+	position: relative;
+	width: 100%;
+	height: $top-panel--height;
+	background-color: var(--prime-color-5d);
+	overflow: hidden;
+
+	@include transition(.5s);
+
+	a { text-decoration: none }
+
+	.brand {
+		user-select: none;
+		white-space: nowrap;
+		cursor: default;
+
+		& > * {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		&__logo {
+			$top-panel--logo-height: $top-panel--brandHeight + 5px;
+
+			display: inline-block;
+			width: $top-panel--logo-height;
+			height: $top-panel--logo-height;
+			margin-right: 10px;
+
+			background-image: url('#{$imgPath}/logo.png?v=#{$VERSION}');
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: contain;
+		}
+
+		&__text {
+			@include transition(.5s);
+
+			text-transform: uppercase;
+			font-family: Tahoma, Geneva, Roboto, Arial, sans-serif;
+			font-weight: 600;
+			letter-spacing: 2px;
+			font-size: $top-panel--brandHeight;
+			color: #fff;
+
+			&--subtitle {
+				&:before { content: ' / ' }
+			}
+
+			&:hover {
+				//opacity: .85;
+				text-shadow: 1px 1px 2px #ccc;
+			}
+		}
+	}
+
+	.right {
+		@include flexbox(auto, auto, center, auto);
+		position: absolute;
+		top: 0; right: 0;
+		height: $top-panel--height;
+		padding-right: 5px;
+		font-size: 18px;
+
+		user-select: none;
+		cursor: default;
+
+		&__elem {
+			@include flexbox(auto, center, center, auto);
+
+			background-color: transparent;
+			background-color: rgba(0, 0, 0, .1);
+
+			border: 0;
+			border-radius: 5px;
+			outline: 0;
+
+			height: 100%;
+			padding: 0 10px;
+			opacity: .7;
+
+			font-size: 1em;
+			color: #fff;
+
+			@include transition(.3s);
+			cursor: pointer;
+
+			&:hover {
+				opacity: .9;
+			}
+		}
+
+		li {
+			display: inline;
+			list-style: none;
+			height: 30px;
+
+			&:not(:first-child) {
+				margin-left: 5px;
+			}
+
+			&.li {
+				&--offset { margin-right: 5px }
+			}
+		}
+	}
+}
+
+@media screen and (max-width: 649px) {
+	.top-panel {
+		.right {
+			display: none;
+		}
+	}
+}
+
+@media screen and (max-width: 349px) {
+	.top-panel {
+		.brand {
+			&__text {
+				&--title {
+					display: none;
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,149 @@
+@import 'inc/vars';
+@import 'inc/mixins';
+
+:root {
+	--border: 1px solid #c1c1c1;
+}
+
+body {
+	font-family: Roboto, Arial, sans-serif;
+}
+
+main {
+	font-size: 18px;
+	line-height: 1.2em;
+}
+
+fieldset {
+	margin: 20px 10px 0;
+	padding: 10px;
+	border: var(--border);
+
+	legend {
+		padding: 2.5px 5px;
+		border: var(--border);
+	}
+}
+
+hr {
+	border-top: var(--border);
+}
+
+p {
+	padding: 5px;
+
+	&:not(:first-child) {
+		margin-top: 5px;
+	}
+
+	&.hidden {
+		display: none;
+	}
+
+	&.submit {
+		margin-top: 15px;
+	}
+
+	label:first-child {
+		margin-right: 5px;
+	}
+
+	label, input {
+		vertical-align: middle
+	}
+}
+
+.text-m {
+	font-size: .9em;
+
+	&-m { font-size: .8em }
+}
+
+input {
+	margin: 0 5px;
+	padding: 2.5px 5px;
+
+	&[type='number'] { width: 5em }
+	&[type='text'] { width: 30em }
+
+	&[type='color'] { padding: 0 }
+
+	&[type='submit'], &[type='radio'], &[type='checkbox'], &[type='color'] {
+		cursor: pointer;
+	}
+
+	&[type='submit'] {
+		$_color: #f1f1f1;
+		margin: 0 5px 0 0;
+		padding: 5px 10px;
+		border: var(--border);
+		border-radius: 5px;
+		background-color: $_color;
+
+		@include transition(.3s);
+
+		&:hover {
+			background-color: darken($_color, 5%);
+		}
+	}
+
+	&[type='radio'] {
+		$_size: 1.3em;
+		width: $_size; height: $_size;
+
+		& + label[for] {
+			cursor: pointer;
+		}
+
+		&[disabled] {
+			cursor: not-allowed;
+
+			& + label[for] {
+				cursor: not-allowed;
+			}
+		}
+	}
+
+	&[type='checkbox'] {
+		$_size: 1.2em;
+		width: $_size; height: $_size;
+	}
+}
+
+footer {
+	padding: 20px;
+	padding-right: 10px;
+	text-align: right;
+	line-height: 1.1em;
+	color: #a9a9a9;
+}
+
+samp {
+	padding: 5px;
+	background-color: #e4e4e4;
+	font-size: .8em;
+	line-height: 2.5em;
+
+	vertical-align: middle;
+}
+
+details {
+	padding: 5px;
+
+	summary { cursor: pointer }
+
+	p {
+		margin-top: 0 !important;
+		margin-left: calc(1em - 5px);
+	}
+}
+
+@media screen and (max-width: 599px) {
+	input {
+		&[type='text'] {
+			display: block;
+			width: 100%;
+			margin: 5px 0 0;
+		}
+	}
+}

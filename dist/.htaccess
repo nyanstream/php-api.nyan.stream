@@ -1,0 +1,16 @@
+# Кодировка
+AddDefaultCharset utf-8
+
+# Запрет на просмотр директорий
+Options All -Indexes
+
+# Форсированный HTTPS
+RewriteEngine on
+RewriteCond %{HTTPS} !on
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+
+# Рерайт всех .json
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.json -f
+RewriteRule ^(.+)$ $1.json [L,QSA]

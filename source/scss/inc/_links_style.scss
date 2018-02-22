@@ -1,0 +1,13 @@
+a {
+	//display: inline;
+	padding: 0 .5px;
+	text-decoration: none;
+	color: $textColor;
+	border-bottom: 1px solid $textColor;
+
+	@include transition(.3s);
+
+	&:hover {
+		background-color: rgba($textColor, .1);
+	}
+}
