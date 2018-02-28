@@ -22,7 +22,7 @@ RewriteRule ^(.+)$ $1.json [L,QSA]
 # Аутентификация
 
 <files 🤔-panel.php>
-	AuthType Digest
+	AuthType Basic
 	AuthName 'Green Hill Zone'
 	AuthUserFile /home/www/id0336/data/nyan_panel/suka.passwd
 	Require valid-user
