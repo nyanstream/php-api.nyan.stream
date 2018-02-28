@@ -35,7 +35,7 @@ Header set Strict-Transport-Security 'max-age=31536000; includeSubDomains; prelo
 
 Header set Content-Security-Policy "default-src 'self'; \
  style-src 'self' 'unsafe-inline' https://nyan.stream https://fonts.googleapis.com; \
- font-src 'self' https://fonts.gstatic.com; \
+ font-src 'self' https://nyan.stream https://fonts.gstatic.com; \
  img-src 'self' data: https://nyan.stream; \
- script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com"
+ script-src 'self' 'unsafe-inline' https://nyan.stream https://cdnjs.cloudflare.com"
 </IfModule>

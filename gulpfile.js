@@ -56,12 +56,12 @@ let paths = {
 gulp.task('local-php-server', () => {
 	phpServer.server({
 		base: dirs.prod.build,
-		port: 8081,
+		port: 1337,
 		stdio: 'ignore'
 	}, () => liveServer({
 		proxy: 'localhost:8081',
 		notify: false,
-		port: 8080
+		port: 8081
 	}))
 })
 
@@ -71,9 +71,9 @@ gulp.task('pug', () => tube([
 	pug({ locals: {
 		VERSION: project.version,
 		PATHS: {
-			js:   `${dirs.prod.assets}/js`,
-			css:  `${dirs.prod.assets}/css`,
-			img:  `${dirs.prod.assets}/img`
+			js:   `/${dirs.prod.assets}/js`,
+			css:  `/${dirs.prod.assets}/css`,
+			img:  `/${dirs.prod.assets}/img`
 		}
 	}}),
 	bom(),
@@ -108,7 +108,7 @@ let scssTubes = [
 	plumber(),
 	sass.vars({
 		$VERSION: project.version,
-		$imgPath: `../img`
+		$imgPath: `/${dirs.prod.assets}/img`
 	}),
 	sass.compile({outputStyle: 'compressed'}),
 	csso(),
