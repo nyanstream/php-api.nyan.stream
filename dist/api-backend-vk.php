@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 	date_default_timezone_set('Europe/Moscow');
 	error_reporting(0);
 
@@ -41,8 +41,8 @@
 		$vkFile = 'vk-news.json';
 
 		if (filemtime($vkFile) < time() - 10) {
-			$vk_vid_ac =  file_get_contents('🤫/vk-token.txt');
-			$url =        $APIep['vk'] . '/wall.get?owner_id=-' . $vkData['comID'] . '&count=6&extended=1&v=' . $vkData['api-version'] . '&access_token=' . $vk_vid_ac;
+			$vk_vid_ac = file_get_contents('🤫/vk-token.txt');
+			$url = $APIep['vk'] . '/wall.get?owner_id=-' . $vkData['comID'] . '&count=6&extended=1&v=' . $vkData['api-version'] . '&access_token=' . $vk_vid_ac;
 
 			$vk = file_get_contents($url);
 			if (!$vk) { return false; }

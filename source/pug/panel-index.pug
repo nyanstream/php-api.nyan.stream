@@ -26,12 +26,9 @@ html(lang='ru')
 
 		include inc/meta-font.pug
 
-		link(rel='stylesheet' href=`${URLs.same}/assets/css/nyan-every.min.css?v=2.3.1?v=${VERSION}`)
 		link(rel='stylesheet' href=`${PATHS.css}/admin-panel.min.css?v=${VERSION}`)
 	body
 		div.container
-			header.top-panel
-				+headerBrand(subTitle)
 			main.panel
 				form(action='?action' method='post')
 					fieldset.add-air
