@@ -1,11 +1,20 @@
 {
 	"name": "php-api.nyan.stream",
-	"description": "",
+	"description": "Source code of nyan.stream API services.",
 	"private": true,
-	"version": "0.0.5",
+	"version": "0.1.0",
 	"author": "Dmitry <dmitry@cojam.ru> (https://e965.ru)",
 	"repository": "bitbucket:ruLait/php-api.nyan.stream",
-	"license": "MIT",
+	"license": "UNLICENSED",
+	"_config": {
+		"dirs": {
+			"dev": "source",
+			"prod": {
+				"build": "dist",
+				"assets": "assets"
+			}
+		}
+	},
 	"dependencies": {
 		"kamina-js": "1.2.7"
 	},
@@ -13,17 +22,17 @@
 		"browser-sync": "2.23.6",
 		"gulp": "3.9.1",
 		"gulp-bom": "2.0.0",
+		"gulp-clean-css": "3.9.3",
 		"gulp-connect-php": "1.0.3",
-		"gulp-csso": "3.0.1",
 		"gulp-pipe": "1.0.4",
 		"gulp-plumber": "1.2.0",
-		"gulp-pug": "3.3.0",
+		"gulp-pug": "4.0.1",
 		"gulp-rename": "1.2.2",
-		"gulp-sass": "3.1.0",
+		"gulp-sass": "4.0.1",
 		"gulp-sass-variables": "1.1.1",
 		"gulp-uglify": "3.0.0",
 		"gulp-watch": "5.0.0",
-		"gulp-watch-sass": "1.4.0",
+		"gulp-watch-sass": "1.4.1",
 		"uglify-es": "3.3.9"
 	}
 }

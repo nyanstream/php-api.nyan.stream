@@ -8,7 +8,7 @@ let
 	rename =      require('gulp-rename'),
 	watch =       require('gulp-watch'),
 	plumber =     require('gulp-plumber'),
-	csso =        require('gulp-csso'),
+	cleanCSS =    require('gulp-clean-css'),
 	pug =         require('gulp-pug'),
 	gulpPHP =     require('gulp-connect-php'),
 	liveServer =  require('browser-sync')
@@ -26,16 +26,11 @@ let uglify = {
 
 let
 	minifyJS = uglify.composer(uglify.core, console),
-	reloadServer = () => liveServer.stream(),
-	phpServer = new gulpPHP()
+	reloadServer = () => liveServer.stream()
 
-let dirs = {
-	dev: 'source',
-	prod: {
-		build:  'dist',
-		assets: 'assets'
-	}
-}
+let vendors = require('./vendors-data.json')
+
+let dirs = project._config.dirs
 
 let paths = {
 	panel: {
@@ -54,12 +49,12 @@ let paths = {
 }
 
 gulp.task('local-php-server', () => {
-	phpServer.server({
-		base: dirs.prod.build,
-		port: 1337,
-		stdio: 'ignore'
+	gulpPHP.server({
+		port: '13378',
+		stdio: 'ignore',
+		base: dirs.prod.build
 	}, () => liveServer({
-		proxy: 'localhost:8081',
+		proxy: '127.0.0.1:13378',
 		notify: false,
 		port: 8081
 	}))
@@ -74,7 +69,8 @@ gulp.task('pug', () => tube([
 			js:   `/${dirs.prod.assets}/js`,
 			css:  `/${dirs.prod.assets}/css`,
 			img:  `/${dirs.prod.assets}/img`
-		}
+		},
+		LIBS: vendors
 	}}),
 	bom(),
 	rename(file => {
@@ -111,7 +107,7 @@ let scssTubes = [
 		$imgPath: `/${dirs.prod.assets}/img`
 	}),
 	sass.compile({outputStyle: 'compressed'}),
-	csso(),
+	cleanCSS(),
 	bom(),
 	rename({suffix: '.min'}),
 	gulp.dest(paths.css.prod)

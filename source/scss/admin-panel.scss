@@ -63,7 +63,7 @@ input {
 	padding: 2.5px 5px;
 
 	&[type='number'] { width: 5em }
-	&[type='text'] { width: 30em }
+	&[type='text'], &[type='url'] { width: 30em }
 
 	&[type='color'] { padding: 0 }
 

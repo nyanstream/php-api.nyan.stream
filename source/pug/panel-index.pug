@@ -8,8 +8,7 @@ doctype html
 html(lang='ru')
 	head
 		include inc/vars.pug
-		include inc/mixins.pug
-		- var subTitle = 'Panel'
+		- var subTitle = 'Панель'
 
 		meta(charset='utf-8')
 		title #{title.toUpperCase()} / #{subTitle}
@@ -22,7 +21,7 @@ html(lang='ru')
 		include inc/meta-viewport.pug
 		meta(name='robots' content='noindex, nofollow')
 
-		link(rel='shortcut icon' href=`${URLs.favicon}`)
+		link(rel='shortcut icon' href=`${URLs.favicon}?v=${VERSION}`)
 
 		include inc/meta-font.pug
 
@@ -31,82 +30,19 @@ html(lang='ru')
 		div.container
 			main.panel
 				form(action='?action' method='post')
-					fieldset.add-air
-						legend Добавление нового эфира
-						p
-							label Время начала:
-							input#time_start(name='time_start' type='datetime-local' value='2016-05-06T00:00' required)
-							br
-							em.text-m-m Время должно быть московским.
-						p
-							label Продолжительность:
-							input#duration(name='duration' type='number' min='1' placeholder='60')
-							label(for='duration') мин.
-							br
-							em.text-m-m Необязательно, стандартное время эфира &ndash; 1 час.
-						p
-							label(for='air_name') Название:
-							input#air_name(name='air_name' type='text'  placeholder='Binan Koukou Chikyuu Bouei-bu LOVE! (1-2 NEW)' required)
-						p
-							label(for='air_link') Ссылка:
-							input#air_link(name='air_link' type='text' placeholder='https://shikimori.org/animes/1639')
-							br
-							em.text-m-m Необязательно, но желательно.
-						p(style='display: none')
-							label(for='air_is_secret') Эфир секретный?
-							input#air_is_secret(name='air_is_secret' type='checkbox')
-							br
-							em.text-m-m Не будет отображаться в расписании, удалить его также будет нельзя.
-						p.add-air-as-backup
-							label(for='air_is_backup') Эфир на backup-потоке?
-							input#air_is_backup(name='air_is_backup' type='checkbox')
-							br
-						p.submit
-							input(name='add_air' type='submit' value='Добавить')
-							label #[i.text-m Внимательно проверьте введённые данные!]
+					include inc/forms/add-air.pug
+
 				form(action='?action' method='post')
-					fieldset.rm-air
-						legend Удалить последний эфир из расписания
-						p
-							span Последний эфир: #[samp.info]
-						p
-							label(for='rm_air_cnf') Вы точно этого хотите?
-							input#rm_air_cnf(name='rm_air_cnf' type='checkbox' required)
-						p.submit
-							input(name='rm_air' type='submit' value='Удалить')
+					include inc/forms/rm-air.pug
 
 				| <?php if ($isAdminUser == true): ?>
 
 				form(action='?action' method='post')
-					fieldset.expired-clear
-						legend Удалить старые эфиры из расписания
-						p #[samp.count]
-						p
-							label(for='expire_chear_cnf') Вы точно этого хотите?
-							input#expire_chear_cnf(name='expire_chear_cnf' type='checkbox' required)
-						p.submit
-							input(name='expired_clear' type='submit' value='Удалить')
+					include inc/forms/expired-clear.pug
 
 				form(action='?action' method='post')
-					fieldset.noti
-						legend Работа с оповещением
-						p.noti-text.text-m
-						p
-							label(for='noti_text') Текст:
-							input#noti_text(name='noti_text' type='text' placeholder='напр. Розыгрыш BMW M3, не пропусти!' required)
-						details.text-m
-							summary Памятка по разметке
-							p Для стилизации текста можно использовать #[kbd &lt;b&gt;#[b жирный шрифт]&lt;/b&gt;] и #[kbd &lt;i&gt;#[i курсив]&lt;/i&gt;], деление на абзацы с помощью #[kbd &lt;br&gt;].#[br]Ссылки должны быть вида #[kbd &lt;a href="https://..."&gt;текст&lt;/a&gt;]. В случае локальных ссылок следует использовать #[kbd &lt;a href="/pisos"&gt;&lt;текст&lt;/a&gt;].
-						p
-							label(for='noti_color') Цвет фона:
-							input#noti_color(name='noti_color' type='color' value='#ffffff')
-							br
-							em.text-m-m По техническим причинам рекомендуется выбирать светлые цвета.
-						p
-							label(for='noti_rm') Удалить последнее оповещение?
-							input#noti_rm(name='noti_rm' type='checkbox')
-						p.submit
-							input(name='noti' type='submit' value='Создать')
+					include inc/forms/noti.pug
+
 				fieldset.vk-link
 					legend Обновление токена доступа ВК
 					p
@@ -118,9 +54,8 @@ html(lang='ru')
 					p Последнее обновление оповещения: #[span.tsNoti]
 					p Московское время (на сервере): #[span.tsCurrent]
 
-		+libFromCDN(`moment.js/${libsVer.moment.same.v}/moment.min.js`, libsVer.moment.same.sri)
-		+libFromCDN(`moment.js/${libsVer.moment.same.v}/locale/ru.js`, libsVer.moment.same.sriLocale)
-		+libFromCDN(`moment-timezone/${libsVer.moment.timezone.v}/moment-timezone-with-data.min.js`, libsVer.moment.timezone.sri)
+		each JS in [{ file: `moment.js/${LIBS.js.moment.v.same}/moment.min.js`, sri: LIBS.js.moment.sri.same }, { file: `moment.js/${LIBS.js.moment.v.same}/locale/ru.js`, sri: LIBS.js.moment.sri.locale }, { file: `moment-timezone/${LIBS.js.moment.v.timezone}/moment-timezone-with-data.min.js`, sri: LIBS.js.moment.sri.timezone }]
+				script(src=`https://cdnjs.cloudflare.com/ajax/libs/${JS.file}` integrity=`${JS.sri}` crossorigin='anonymous' defer)
 
 		each JS in ['kamina', 'admin-panel']
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
@@ -161,4 +96,4 @@ html(lang='ru')
 		|?>
 
 		script
-			|<?php echo "document.addEventListener('DOMContentLoaded', () => { initAdminPanel(" . json_encode($PHP_data, JSON_UNESCAPED_UNICODE) . ") })" ?>
+			|<?="document.addEventListener('DOMContentLoaded', () => { initAdminPanel(" . json_encode($PHP_data, JSON_UNESCAPED_UNICODE) . ") })" ?>

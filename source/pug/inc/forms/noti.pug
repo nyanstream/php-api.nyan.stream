@@ -1,0 +1,19 @@
+fieldset.noti
+	legend Работа с оповещением
+	p.noti-text.text-m
+	p
+		label(for='noti_text') Текст:
+		input#noti_text(name='noti_text' type='text' placeholder='напр. Розыгрыш BMW M3, не пропусти!' required)
+	details.text-m
+		summary Памятка по разметке
+		p Для стилизации текста можно использовать #[kbd &lt;b&gt;#[b жирный шрифт]&lt;/b&gt;] и #[kbd &lt;i&gt;#[i курсив]&lt;/i&gt;], деление на абзацы с помощью #[kbd &lt;br&gt;].#[br]Ссылки должны быть вида #[kbd &lt;a href="https://..."&gt;текст&lt;/a&gt;]. В случае локальных ссылок следует использовать #[kbd &lt;a href="/pisos"&gt;текст&lt;/a&gt;].
+	p
+		label(for='noti_color') Цвет фона:
+		input#noti_color(name='noti_color' type='color' value='#ffffff')
+		br
+		em.text-m-m По техническим причинам рекомендуется выбирать светлые цвета.
+	p
+		label(for='noti_rm') Удалить последнее оповещение?
+		input#noti_rm(name='noti_rm' type='checkbox')
+	p.submit
+		input(name='noti' type='submit' value='Создать')

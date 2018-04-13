@@ -1,0 +1,8 @@
+fieldset.expired-clear
+	legend Удалить старые эфиры из расписания
+	p #[samp.count]
+	p
+		label(for='expire_chear_cnf') Вы точно этого хотите?
+		input#expire_chear_cnf(name='expire_chear_cnf' type='checkbox' required)
+	p.submit
+		input(name='expired_clear' type='submit' value='Удалить')

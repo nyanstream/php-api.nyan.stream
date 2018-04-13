@@ -3,5 +3,6 @@ package-lock.json
 npm-debug.log
 
 dist/api/**/*.json
-dist/assets/
+dist/assets/css/
+dist/assets/js/
 dist/*-panel.php
