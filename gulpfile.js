@@ -2,6 +2,7 @@
 
 let
 	project =     require('./package.json'),
+	fs =          require('fs'),
 	gulp =        require('gulp'),
 	tube =        require('gulp-pipe'),
 	bom =         require('gulp-bom'),
@@ -10,13 +11,14 @@ let
 	plumber =     require('gulp-plumber'),
 	cleanCSS =    require('gulp-clean-css'),
 	pug =         require('gulp-pug'),
+	parseYAML =   require('js-yaml'),
 	gulpPHP =     require('gulp-connect-php'),
 	liveServer =  require('browser-sync')
 
 let sass = {
 	compile:  require('gulp-sass'),
 	watch:    require('gulp-watch-sass'),
-	vars:     require('gulp-sass-variables')
+	vars:     require('gulp-sass-vars')
 }
 
 let uglify = {
@@ -28,20 +30,26 @@ let
 	minifyJS = uglify.composer(uglify.core, console),
 	reloadServer = () => liveServer.stream()
 
-let vendors = require('./vendors-data.json')
+let parseYAMLfile = fileName => parseYAML.load(fs.readFileSync(`./${fileName}.yaml`, 'utf8'))
 
-let dirs = project._config.dirs
+let config = parseYAMLfile('project-config')
+
+let vendors = parseYAMLfile('project-vendors')
+
+let dirs = config.dirs
 
 let paths = {
 	panel: {
 		dev: [`${dirs.dev}/pug/**/*.pug`, `!${dirs.dev}/pug/inc/**/*.pug`],
 		prod: dirs.prod.build
 	},
+
 	js: {
 		dev: `${dirs.dev}/js/**/*.js`,
 		prod: `${dirs.prod.build}/${dirs.prod.assets}/js/`,
 		kamina: 'node_modules/kamina-js/dist/kamina.min.js',
 	},
+
 	css: {
 		dev: `${dirs.dev}/scss/**/*.scss`,
 		prod: `${dirs.prod.build}/${dirs.prod.assets}/css/`

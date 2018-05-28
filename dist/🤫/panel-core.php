@@ -36,8 +36,14 @@
 
 	function schedNew($_time, $_duration, $_title, $_link, $_is_secret, $_is_backup) {
 		$time_start = strtotime($_time);
-		if ($_duration) { $duration = $_duration * 60; } else { $duration = 3600; }
+
+		$duration = $_duration
+			? $_duration * 60
+			: 3600;
+
 		$time_end = $time_start + $duration;
+
+		$title = trim(preg_replace('/\s+/g', '', $title));
 
 		$title = addcslashes($_title, '"');
 		$link = addcslashes($_link, '"');
@@ -47,7 +53,10 @@
 			'title' => json_decode('"' . $title . '"')
 		];
 
-		if ($_link != null) { $new['link'] = json_decode('"' . $link . '"'); }
+		if ($_link != null) {
+			$new['link'] = json_decode('"' . $link . '"');
+		}
+
 		if ($_is_secret == 'on') { $new['secret'] = true; }
 		if ($_is_backup == 'on') { $new['backup'] = true; }
 
@@ -69,9 +78,13 @@
 
 	function addShedData($_file, $_where, $_what) {
 		$path = $GLOBALS['path'];
+
 		$_where[count($_where)] = $_what;
 		$_where = shedSort($_where);
-		if ($_what['title'] != null) { file_put_contents($path . '/' . $_file, json_encode($_where, JSON_UNESCAPED_UNICODE)); }
+
+		if ($_what['title'] != null) {
+			file_put_contents($path . '/' . $_file, json_encode($_where, JSON_UNESCAPED_UNICODE));
+		}
 	}
 
 	/*
@@ -80,12 +93,16 @@
 
 	function rmShedData($_file, $_where, $_item) {
 		$path = $GLOBALS['path'];
+
 		$_where_tmp = [];
+
 		foreach($_where as $item) {
 			if ($_item == $item) { unset($item); continue; }
 			$_where_tmp[count($_where_tmp)] = $item;
 		}
+
 		$_where = shedSort($_where_tmp);
+
 		file_put_contents($path . '/' . $_file, json_encode($_where, JSON_UNESCAPED_UNICODE));
 	}
 
@@ -102,6 +119,27 @@
 		addShedData($file['sched'], $schedAnime_data, $newAir);
 	}
 
+	/*
+	 * Отправка пуша в PushAll
+	 */
+
+	// if (isset($_POST['send_push'])) {
+	// 	curl_setopt_array($pushCurl = curl_init(), [
+	// 		CURLOPT_URL => $APIep['push'],
+	// 		CURLOPT_POSTFIELDS => [
+	// 			'type' => 'broadcast',
+	// 			'id' => $pushData['id'],
+	// 			'key' => $pushData['key'],
+	// 			'text' => 'Тестовое сообщение',
+	// 			'title' => 'Заголовок'
+	// 		],
+	// 		CURLOPT_SAFE_UPLOAD => true,
+	// 		CURLOPT_RETURNTRANSFER => true
+	// 	]);
+	//
+	// 	curl_close($pushCurl);
+	// }
+
 	if (isset($_POST['rm_air'])) {
 		rmShedData($file['sched'], $schedAnime_data, $schedAnime_latest);
 	}
@@ -113,22 +151,30 @@
 
 	function countExprs($_where) {
 		$count = 0;
-		foreach ($_where as $item) { if ($item['e'] < time()) $count++; }
+
+		foreach ($_where as $item) {
+			if ($item['e'] < time()) $count++;
+		}
+
 		return $count;
 	}
 
 	function rmExprs($_file, $_where, $_time) {
 		$path = $GLOBALS['path'];
+
 		$_where_tmp = [];
+
 		foreach ($_where as $item) {
 			if ($item['e'] < $_time) { unset($item); continue; }
 			$_where_tmp[count($_where_tmp)] = $item;
 		}
+
 		$_where = shedSort($_where_tmp);
+
 		file_put_contents($path . '/' . $_file, json_encode($_where, JSON_UNESCAPED_UNICODE));
 	}
 
-	if (isset($_POST['expired_clear'])) {
+	if (isset($_POST['expired_clear']) && $isAdminUser) {
 		rmExprs($file['sched'], $schedAnime_data, time());
 	}
 
@@ -145,15 +191,17 @@
 			'text' => json_decode('"' . $text . '"')
 		];
 
-		if ($_color != '#ffffff') { $new['color'] = json_decode('"' . $_color . '"'); }
+		if ($_color != '#ffffff') {
+			$new['color'] = json_decode('"' . $_color . '"');
+		}
 
 		return $new;
 	}
 
-	if (isset($_POST['noti'])) {
-		if (!isset($_POST['noti_rm'])) {
-			$noti_content = notiNew($_POST['noti_text'], $_POST['noti_color']);
-		} else { $noti_content = ['enabled' => false]; }
+	if (isset($_POST['noti']) && $isAdminUser) {
+		$noti_content = !isset($_POST['noti_rm'])
+			? notiNew($_POST['noti_text'], $_POST['noti_color'])
+			: ['enabled' => false];
 
 		file_put_contents($path . '/' . $file['noti'], json_encode($noti_content, JSON_UNESCAPED_UNICODE));
 	}

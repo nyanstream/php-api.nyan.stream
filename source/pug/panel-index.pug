@@ -1,8 +1,6 @@
 |<?php
 |	date_default_timezone_set('Europe/Moscow');
 |	include_once '🤫/panel-core.php';
-|
-|	$isAdminUser = in_array($_SERVER['PHP_AUTH_USER'], $adminUsers);
 |?>
 doctype html
 html(lang='ru')
@@ -14,7 +12,7 @@ html(lang='ru')
 		title #{title.toUpperCase()} / #{subTitle}
 
 		| <?php if (isset($_GET['action'])) echo '
-		script document.location.href="'. $_SERVER['PHP_SELF'] .'"
+		script history.pushState('', document.title, location.pathname); location.href = location.pathname
 		noscript #[meta(refresh="0; '. $_SERVER['PHP_SELF'] .'")]
 		|'; ?>
 
@@ -34,6 +32,9 @@ html(lang='ru')
 
 				form(action='?action' method='post')
 					include inc/forms/rm-air.pug
+
+				//- form(action='?action' method='post')
+				//- 	include inc/forms/send-push.pug
 
 				| <?php if ($isAdminUser == true): ?>
 

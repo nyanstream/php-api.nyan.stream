@@ -1,0 +1,12 @@
+fieldset.send-push
+	legend Отправить пуш в PushAll
+	p
+		label(for='push_text') Текст:
+		input#noti_text(name='push_text' type='text' placeholder='Стрим скоро начнётся!')
+		br
+		em.text-m-m Необязательно, отправится стандартный текст (в плейсхолдере).
+	p
+		label(for='send_push_cnf') Вы точно этого хотите?
+		input#rm_air_cnf(name='send_push_cnf' type='checkbox' required)
+	p.submit
+		input(name='send_push' type='submit' value='Отправить')

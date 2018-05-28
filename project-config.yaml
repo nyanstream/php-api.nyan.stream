@@ -1,0 +1,5 @@
+dirs:
+  dev: source
+  prod:
+    build: dist
+    assets: assets

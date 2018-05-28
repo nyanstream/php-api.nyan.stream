@@ -1,0 +1,12 @@
+js:
+
+  # cdnjs.com/libraries/moment.js (moment.min.js & ru.js)
+  # cdnjs.com/libraries/moment-timezone (moment-timezone-with-data.min.js)
+  moment:
+    v:
+      same: 2.22.1
+      timezone: 0.5.17
+    sri:
+      same: sha256-L3S3EDEk31HcLA5C6T2ovHvOcD80+fgqaCDt2BAi92o=
+      locale: sha256-qR4pdhxtx7dwKGJuYGoYjfnCQBPXv47hzLLU8jPLVUY=
+      timezone: sha256-h9eAuKJdF9lNAnZLJEX7ULhAfihRd0emy1Y4Bxqx7Js=
