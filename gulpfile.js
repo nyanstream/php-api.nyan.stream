@@ -113,8 +113,8 @@ let scssTubes = [
 	sass.vars({
 		$VERSION: project.version,
 		$imgPath: `/${dirs.prod.assets}/img`
-	}),
-	sass.compile({outputStyle: 'compressed'}),
+	}, { verbose: false }),
+	sass.compile({ outputStyle: 'compressed' }),
 	cleanCSS(),
 	bom(),
 	rename({suffix: '.min'}),
