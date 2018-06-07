@@ -8,22 +8,22 @@
 
 	$path = getcwd();
 
-	$schedAnime = file_get_contents($file['sched']);
-	$noti       = file_get_contents($file['noti']);
+	$schedAnime =  file_get_contents($file['sched']);
+	$noti =        file_get_contents($file['noti']);
 
-	$schedAnime_data = json_decode($schedAnime, true);
-	$noti_data       = json_decode($noti, true);
+	$schedAnime_data =  json_decode($schedAnime, true);
+	$noti_data =        json_decode($noti, true);
 
 	/*
 	 * Создаются временные массивы без "секретных эфиров"
-	 * Важно понимать: счётчик эфиров и последний эфир берутся именно из этого временного, а не из настоящего массива.
+	 * Важно понимать: счётчик эфиров и последний эфир берутся именно из этого, временного, а не из настоящего массива.
 	 */
 
 	$schedAnime_data_tmp = [];
 
 	foreach ($schedAnime_data as &$item) {
 		if ($item['secret'] == true) { continue; }
-		$schedAnime_data_tmp[count($schedAnime_data_tmp)] = $item;
+		array_push($schedAnime_data_tmp, $item);
 	}
 
 	$schedAnime_count  = count($schedAnime_data_tmp);
@@ -31,7 +31,6 @@
 
 	/*
 	 * Компановка нового элемента расписания
-	 * @BUG если в названии есть символ "\", то элемент не добавляется
 	 */
 
 	function schedNew($_time, $_duration, $_title, $_link, $_is_secret, $_is_backup) {
@@ -43,10 +42,10 @@
 
 		$time_end = $time_start + $duration;
 
-		$title = trim(preg_replace('/\s+/g', '', $title));
+		$title = trim(preg_replace('/\s+/', '', $title));
 
-		$title = addcslashes($_title, '"');
-		$link = addcslashes($_link, '"');
+		$title = addslashes($_title);
+		$link = addslashes($_link);
 
 		$new = [
 			's' => $time_start,	'e' => $time_end,
@@ -77,9 +76,9 @@
 	 */
 
 	function addShedData($_file, $_where, $_what) {
-		$path = $GLOBALS['path'];
+		global $path;
 
-		$_where[count($_where)] = $_what;
+		array_push($_where, $_what);
 		$_where = shedSort($_where);
 
 		if ($_what['title'] != null) {
@@ -92,13 +91,16 @@
 	 */
 
 	function rmShedData($_file, $_where, $_item) {
-		$path = $GLOBALS['path'];
+		global $path;
 
 		$_where_tmp = [];
 
 		foreach($_where as $item) {
-			if ($_item == $item) { unset($item); continue; }
-			$_where_tmp[count($_where_tmp)] = $item;
+			if ($_item == $item) {
+				unset($item); continue;
+			}
+
+			array_push($_where_tmp, $item);
 		}
 
 		$_where = shedSort($_where_tmp);
@@ -160,13 +162,16 @@
 	}
 
 	function rmExprs($_file, $_where, $_time) {
-		$path = $GLOBALS['path'];
+		global $path;
 
 		$_where_tmp = [];
 
 		foreach ($_where as $item) {
-			if ($item['e'] < $_time) { unset($item); continue; }
-			$_where_tmp[count($_where_tmp)] = $item;
+			if ($item['e'] < $_time) {
+				unset($item); continue;
+			}
+
+			array_push($_where_tmp, $item);
 		}
 
 		$_where = shedSort($_where_tmp);
@@ -174,7 +179,7 @@
 		file_put_contents($path . '/' . $_file, json_encode($_where, JSON_UNESCAPED_UNICODE));
 	}
 
-	if (isset($_POST['expired_clear']) && $isAdminUser) {
+	if (isset($_POST['expired_clear']) && $USER['isAdmin'] == true) {
 		rmExprs($file['sched'], $schedAnime_data, time());
 	}
 
@@ -183,7 +188,7 @@
 	 */
 
 	function notiNew($_text, $_color) {
-		$text = addcslashes($_text, '"');
+		$text = addslashes($_text);
 
 		$new = [
 			'enabled' => true,
@@ -198,7 +203,7 @@
 		return $new;
 	}
 
-	if (isset($_POST['noti']) && $isAdminUser) {
+	if (isset($_POST['noti']) && $USER['isAdmin'] == true) {
 		$noti_content = !isset($_POST['noti_rm'])
 			? notiNew($_POST['noti_text'], $_POST['noti_color'])
 			: ['enabled' => false];

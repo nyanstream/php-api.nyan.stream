@@ -48,7 +48,7 @@ p {
 	}
 
 	label, input {
-		vertical-align: middle
+		vertical-align: middle;
 	}
 }
 
@@ -63,11 +63,17 @@ input {
 	padding: 2.5px 5px;
 
 	&[type='number'] { width: 5em }
-	&[type='text'], &[type='url'] { width: 30em }
+
+	&[type='text'], &[type='url'] {
+		width: 30em;
+	}
 
 	&[type='color'] { padding: 0 }
 
-	&[type='submit'], &[type='radio'], &[type='checkbox'], &[type='color'] {
+	&[type='submit'],
+	&[type='radio'],
+	&[type='checkbox'],
+	&[type='color'] {
 		cursor: pointer;
 	}
 

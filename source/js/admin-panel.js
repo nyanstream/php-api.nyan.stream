@@ -1,6 +1,6 @@
 'use strict'
 
-var initAdminPanel = data => {
+var initAdminPanel = (data = {}) => {
 	/*
 	 * @TODO Сделать скрытие форм при ошибке обработчика
 	 */

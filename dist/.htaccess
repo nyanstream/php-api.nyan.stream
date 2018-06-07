@@ -34,6 +34,7 @@ RewriteRule ^(.+)$ $1.json [L,QSA]
 Header set Strict-Transport-Security 'max-age=31536000; includeSubDomains; preload' env=HTTPS
 
 Header set Content-Security-Policy "default-src 'self'; \
+ frame-ancestors 'self'; \
  style-src 'self' 'unsafe-inline' https://nyan.stream https://fonts.googleapis.com; \
  font-src 'self' https://nyan.stream https://fonts.gstatic.com; \
  img-src 'self' data: https://nyan.stream; \

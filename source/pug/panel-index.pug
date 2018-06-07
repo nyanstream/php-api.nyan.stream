@@ -11,10 +11,7 @@ html(lang='ru')
 		meta(charset='utf-8')
 		title #{title.toUpperCase()} / #{subTitle}
 
-		| <?php if (isset($_GET['action'])) echo '
-		script history.pushState('', document.title, location.pathname); location.href = location.pathname
-		noscript #[meta(refresh="0; '. $_SERVER['PHP_SELF'] .'")]
-		|'; ?>
+		script let loc = location; '?action' == loc.search && (history.pushState( '' , document.title , loc.pathname), loc.href = loc.pathname)
 
 		include inc/meta-viewport.pug
 		meta(name='robots' content='noindex, nofollow')
@@ -36,7 +33,7 @@ html(lang='ru')
 				//- form(action='?action' method='post')
 				//- 	include inc/forms/send-push.pug
 
-				| <?php if ($isAdminUser == true): ?>
+				| <?php if ($USER['isAdmin'] == true): ?>
 
 				form(action='?action' method='post')
 					include inc/forms/expired-clear.pug
@@ -64,7 +61,6 @@ html(lang='ru')
 		|<?php
 		|	$PHP_data = [
 		|		'timezone' => date_default_timezone_get(),
-		|		'user' => $isAdminUser,
 		|		'sched' => [
 		|			'count' => $schedAnime_count,
 		|			'countExpr' => countExprs($schedAnime_data_tmp),
@@ -81,7 +77,7 @@ html(lang='ru')
 		|			'current' => time()
 		|		]
 		|	];
-		|	if ($isAdminUser) {
+		|	if ($USER['isAdmin'] == true) {
 		|		$PHP_data['noti'] = [
 		|			'enabled' => $noti_data['enabled'],
 		|			'text' => $noti_data['text'] ? $noti_data['text'] : '',
@@ -97,4 +93,4 @@ html(lang='ru')
 		|?>
 
 		script
-			|<?="document.addEventListener('DOMContentLoaded', () => { initAdminPanel(" . json_encode($PHP_data, JSON_UNESCAPED_UNICODE) . ") })" ?>
+			|<?="document.addEventListener('DOMContentLoaded', () => { '?action' !== loc.search && initAdminPanel(" . json_encode($PHP_data, JSON_UNESCAPED_UNICODE) . ") })" ?>

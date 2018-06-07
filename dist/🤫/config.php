@@ -35,7 +35,12 @@
 	 * Перечень пользователей Basic Auth, имеющих доступ к административным функциям
 	 */
 
-	$adminUsers = [''];
+	$_adminUsers = [''];
 
-	$isAdminUser = in_array($_SERVER['PHP_AUTH_USER'], $adminUsers);
+	$_phpUserName = $_SERVER['PHP_AUTH_USER'];
+
+	$USER = [
+		'name' =>     $_phpUserName ? $_phpUserName : 'Имярек',
+		'isAdmin' =>  in_array($_phpUserName, $_adminUsers)
+	];
 ?>

@@ -11,8 +11,7 @@
 	$imgProxy = array('https://' => 'https://images.weserv.nl/?url=ssl:');
 
 	function get_vk_token() {
-		$APIep =   $GLOBALS['APIep'];
-		$vkData =  $GLOBALS['vkData'];
+		global $APIep, $vkData;
 
 		if ($_GET['state'] === 'vk-get-code') {
 			$vkGetT = file_get_contents($APIep['vk_ac'] . '?client_id=' . $vkData['id'] . '&client_secret=' . $vkData['secret'] . '&redirect_uri=https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'] . '&code=' . $_GET['code']);
@@ -34,9 +33,7 @@
 	get_vk_token();
 
 	function get_vk_info() {
-		$APIep =     $GLOBALS['APIep'];
-		$vkData =    $GLOBALS['vkData'];
-		$imgProxy =  $GLOBALS['imgProxy'];
+		global $APIep, $vkData, $imgProxy;
 
 		$vkFile = 'vk-news.json';
 
@@ -105,8 +102,7 @@
 	get_vk_info();
 
 	function get_vk_stream_link() {
-		$APIep =   $GLOBALS['APIep'];
-		$vkData =  $GLOBALS['vkData'];
+		global $APIep, $vkData;
 
 		$vkFile = 'vk-stream.json';
 

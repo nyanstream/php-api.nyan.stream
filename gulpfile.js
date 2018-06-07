@@ -111,8 +111,7 @@ gulp.task('minify-js', () => tube([
 let scssTubes = [
 	plumber(),
 	sass.vars({
-		$VERSION: project.version,
-		$imgPath: `/${dirs.prod.assets}/img`
+		VERSION: project.version
 	}, { verbose: false }),
 	sass.compile({ outputStyle: 'compressed' }),
 	cleanCSS(),
