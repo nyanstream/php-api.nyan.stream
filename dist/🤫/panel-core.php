@@ -42,7 +42,7 @@
 
 		$time_end = $time_start + $duration;
 
-		$title = trim(preg_replace('/\s+/', '', $title));
+		$_title = trim(preg_replace('/\s+/', ' ', $_title));
 
 		$title = addslashes($_title);
 		$link = addslashes($_link);
