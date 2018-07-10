@@ -1,5 +1,4 @@
 |<?php
-|	date_default_timezone_set('Europe/Moscow');
 |	include_once '🤫/panel-core.php';
 |?>
 doctype html
@@ -11,7 +10,7 @@ html(lang='ru')
 		meta(charset='utf-8')
 		title #{title.toUpperCase()} / #{subTitle}
 
-		script let loc = location; '?action' == loc.search && (history.pushState( '' , document.title , loc.pathname), loc.href = loc.pathname)
+		script var loc = location
 
 		include inc/meta-viewport.pug
 		meta(name='robots' content='noindex, nofollow')
@@ -24,22 +23,22 @@ html(lang='ru')
 	body
 		div.container
 			main.panel
-				form(action='?action' method='post')
+				form(action='' method='post')
 					include inc/forms/add-air.pug
 
-				form(action='?action' method='post')
+				form(action='' method='post')
 					include inc/forms/rm-air.pug
 
-				//- form(action='?action' method='post')
+				//- form(action='' method='post')
 				//- 	include inc/forms/send-push.pug
 
-				| <?php if ($USER['isAdmin'] == true): ?>
-
-				form(action='?action' method='post')
+				form(action='' method='post')
 					include inc/forms/expired-clear.pug
 
-				form(action='?action' method='post')
+				form(action='' method='post')
 					include inc/forms/noti.pug
+
+				| <?php if ($USER['isAdmin'] == true): ?>
 
 				fieldset.vk-link
 					legend Обновление токена доступа ВК
@@ -48,9 +47,9 @@ html(lang='ru')
 				| <?php endif ?>
 
 				footer.text-m
-					p Последнее обновление расписания: #[span.tsAnime]
-					p Последнее обновление оповещения: #[span.tsNoti]
-					p Московское время (на сервере): #[span.tsCurrent]
+					p Последнее обновление расписания: #[span(data-ts='sched')]
+					p Последнее обновление оповещения: #[span(data-ts='noti')]
+					p Московское время (на сервере): #[span(data-ts='current')]
 
 		each JS in [{ file: `moment.js/${LIBS.js.moment.v.same}/moment.min.js`, sri: LIBS.js.moment.sri.same }, { file: `moment.js/${LIBS.js.moment.v.same}/locale/ru.js`, sri: LIBS.js.moment.sri.locale }, { file: `moment-timezone/${LIBS.js.moment.v.timezone}/moment-timezone-with-data.min.js`, sri: LIBS.js.moment.sri.timezone }]
 				script(src=`https://cdnjs.cloudflare.com/ajax/libs/${JS.file}` integrity=`${JS.sri}` crossorigin='anonymous' defer)
@@ -72,17 +71,17 @@ html(lang='ru')
 		|			]
 		|		],
 		|		'ts' => [
-		|			'anime' => filemtime($file['sched']),
+		|			'sched' => filemtime($file['sched']),
 		|			'noti' => filemtime($file['noti']),
 		|			'current' => time()
-		|		]
-		|	];
-		|	if ($USER['isAdmin'] == true) {
-		|		$PHP_data['noti'] = [
+		|		],
+		|		'noti' => [
 		|			'enabled' => $noti_data['enabled'],
 		|			'text' => $noti_data['text'] ? $noti_data['text'] : '',
 		|			'color' => isset($noti_data['color']) ? $noti_data['color'] : false
-		|		];
+		|		],
+		|	];
+		|	if ($USER['isAdmin'] == true) {
 		|		$PHP_data['vk'] = [
 		|			'URL' => $APIep['vk_au'],
 		|			'appID' => $vkData['id'],
@@ -93,4 +92,4 @@ html(lang='ru')
 		|?>
 
 		script
-			|<?="document.addEventListener('DOMContentLoaded', () => { '?action' !== loc.search && initAdminPanel(" . json_encode($PHP_data, JSON_UNESCAPED_UNICODE) . ") })" ?>
+			|<?="document.addEventListener('DOMContentLoaded', () => { initAdminPanel(" . json_encode($PHP_data, JSON_UNESCAPED_UNICODE) . ") })" ?>

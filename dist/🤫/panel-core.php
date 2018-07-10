@@ -1,6 +1,8 @@
 <?php
 	include 'config.php';
 
+	date_default_timezone_set('Europe/Moscow');
+
 	$file = [
 		'sched' =>  'api/sched.json',
 		'noti' =>   'api/noti.json'
@@ -203,11 +205,16 @@
 		return $new;
 	}
 
-	if (isset($_POST['noti']) && $USER['isAdmin'] == true) {
+	if (isset($_POST['noti'])) {
 		$noti_content = !isset($_POST['noti_rm'])
 			? notiNew($_POST['noti_text'], $_POST['noti_color'])
 			: ['enabled' => false];
 
 		file_put_contents($path . '/' . $file['noti'], json_encode($noti_content, JSON_UNESCAPED_UNICODE));
+	}
+
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		header('Location: ' . $_SERVER['PHP_SELF']);
+		exit();
 	}
 ?>

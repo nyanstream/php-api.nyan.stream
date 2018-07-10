@@ -22,7 +22,7 @@ let sass = {
 }
 
 let uglify = {
-	core:      require('uglify-es'),
+	core:      require('terser'),
 	composer:  require('gulp-uglify/composer')
 }
 
@@ -120,7 +120,7 @@ let scssTubes = [
 	gulp.dest(paths.css.prod)
 ]
 
-gulp.task('scss:only-compile', () => tube(
+gulp.task('scss:build', () => tube(
 	[gulp.src(paths.css.dev)].concat(scssTubes)
 ))
 

@@ -107,19 +107,16 @@ var initAdminPanel = (data = {}) => {
 
 	try {
 		let
-			tsAnime =      parseInt(data.ts.anime),
-			tsRadio =      parseInt(data.ts.radio),
-			tsNoti =       parseInt(data.ts.noti),
-			currentTime =  parseInt(data.ts.current)
+			tsSched =      Number(data.ts.sched),
+			tsNoti =       Number(data.ts.noti),
+			currentTime =  Number(data.ts.current)
 
 		let
-			tsAnimeElem =    $make.qs('footer .tsAnime'),
-			tsRadioElem =    $make.qs('footer .tsRadio'),
-			tsNotiElem =     $make.qs('footer .tsNoti'),
-			tsCurrentElem =  $make.qs('footer .tsCurrent')
+			tsSchedElem =    $make.qs('footer span[data-ts="sched"]'),
+			tsNotiElem =     $make.qs('footer span[data-ts="noti"]'),
+			tsCurrentElem =  $make.qs('footer span[data-ts="current"]')
 
-		if (tsAnimeElem) { tsAnimeElem.textContent = moment.unix(tsAnime).from() }
-		if (tsRadioElem) { tsRadioElem.textContent = moment.unix(tsRadio).from() }
+		if (tsSchedElem) { tsSchedElem.textContent = moment.unix(tsSched).from() }
 		if (tsNotiElem) { tsNotiElem.textContent = moment.unix(tsNoti).from() }
 
 		if (tsCurrentElem) {
