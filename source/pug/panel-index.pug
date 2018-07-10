@@ -10,7 +10,7 @@ html(lang='ru')
 		meta(charset='utf-8')
 		title #{title.toUpperCase()} / #{subTitle}
 
-		script var loc = location
+		script var loc = location; '?action' == loc.search && (history.pushState( '' , document.title , loc.pathname), loc.href = loc.pathname)
 
 		include inc/meta-viewport.pug
 		meta(name='robots' content='noindex, nofollow')
@@ -23,19 +23,19 @@ html(lang='ru')
 	body
 		div.container
 			main.panel
-				form(action='' method='post')
+				form(action='?action' method='post')
 					include inc/forms/add-air.pug
 
-				form(action='' method='post')
+				form(action='?action' method='post')
 					include inc/forms/rm-air.pug
 
-				//- form(action='' method='post')
+				//- form(action='?action' method='post')
 				//- 	include inc/forms/send-push.pug
 
-				form(action='' method='post')
+				form(action='?action' method='post')
 					include inc/forms/expired-clear.pug
 
-				form(action='' method='post')
+				form(action='?action' method='post')
 					include inc/forms/noti.pug
 
 				| <?php if ($USER['isAdmin'] == true): ?>
@@ -92,4 +92,4 @@ html(lang='ru')
 		|?>
 
 		script
-			|<?="document.addEventListener('DOMContentLoaded', () => { initAdminPanel(" . json_encode($PHP_data, JSON_UNESCAPED_UNICODE) . ") })" ?>
+			|<?="document.addEventListener('DOMContentLoaded', () => { '?action' !== loc.search && initAdminPanel(" . json_encode($PHP_data, JSON_UNESCAPED_UNICODE) . ") })" ?>

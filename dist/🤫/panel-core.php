@@ -212,9 +212,4 @@
 
 		file_put_contents($path . '/' . $file['noti'], json_encode($noti_content, JSON_UNESCAPED_UNICODE));
 	}
-
-	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		header('Location: ' . $_SERVER['PHP_SELF']);
-		exit();
-	}
 ?>
