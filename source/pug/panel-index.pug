@@ -1,6 +1,7 @@
 |<?php
 |	include_once '🤫/panel-core.php';
 |?>
+
 doctype html
 html(lang='ru')
 	head
@@ -23,22 +24,22 @@ html(lang='ru')
 	body
 		div.container
 			main.panel
-				form(action='?action' method='post')
+				form(action='?action' method='post' data-form='add-air')
 					include inc/forms/add-air.pug
 
-				form(action='?action' method='post')
+				form(action='?action' method='post' data-form='rm-air')
 					include inc/forms/rm-air.pug
 
 				//- form(action='?action' method='post')
 				//- 	include inc/forms/send-push.pug
 
-				form(action='?action' method='post')
+				form(action='?action' method='post' data-form='expired-clear')
 					include inc/forms/expired-clear.pug
 
-				form(action='?action' method='post')
-					include inc/forms/noti.pug
-
 				| <?php if ($USER['isAdmin'] == true): ?>
+
+				form(action='?action' method='post' data-form='noti')
+					include inc/forms/noti.pug
 
 				fieldset.vk-link
 					legend Обновление токена доступа ВК
@@ -58,37 +59,7 @@ html(lang='ru')
 			script(src=`${PATHS.js}/${JS}.min.js?v=${VERSION}` defer)
 
 		|<?php
-		|	$PHP_data = [
-		|		'timezone' => date_default_timezone_get(),
-		|		'sched' => [
-		|			'count' => $schedAnime_count,
-		|			'countExpr' => countExprs($schedAnime_data_tmp),
-		|			'latest' => [
-		|				'is' => $schedAnime_latest ? true : false,
-		|				'title' => $schedAnime_latest ? $schedAnime_latest['title'] : '',
-		|				'start' => $schedAnime_latest ? $schedAnime_latest['s'] : null,
-		|				'end' => $schedAnime_latest ? $schedAnime_latest['e'] : null,
-		|			]
-		|		],
-		|		'ts' => [
-		|			'sched' => filemtime($file['sched']),
-		|			'noti' => filemtime($file['noti']),
-		|			'current' => time()
-		|		],
-		|		'noti' => [
-		|			'enabled' => $noti_data['enabled'],
-		|			'text' => $noti_data['text'] ? $noti_data['text'] : '',
-		|			'color' => isset($noti_data['color']) ? $noti_data['color'] : false
-		|		],
-		|	];
-		|	if ($USER['isAdmin'] == true) {
-		|		$PHP_data['vk'] = [
-		|			'URL' => $APIep['vk_au'],
-		|			'appID' => $vkData['id'],
-		|			'api' => 'api-backend-vk.php'
-		|		];
-		|		$PHP_data['server'] = $_SERVER['SERVER_NAME'];
-		|	}
+		|	include_once '🤫/panel-data.php';
 		|?>
 
 		script

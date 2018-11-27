@@ -5,8 +5,8 @@ js:
   moment:
     v:
       same: 2.22.2
-      timezone: 0.5.21
+      timezone: 0.5.23
     sri:
       same: sha256-CutOzxCRucUsn6C6TcEYsauvvYilEniTXldPa6/wu0k=
       locale: sha256-qR4pdhxtx7dwKGJuYGoYjfnCQBPXv47hzLLU8jPLVUY=
-      timezone: sha256-VX6SyoDzanqBxHY3YQyaYB/R7t5TpgjF4ZvotrViKAY=
+      timezone: sha256-15jnh2lee6Li94j6XCbw8PRzNZe29O/W9i97yXVyRmA=

@@ -35,7 +35,7 @@
 	 * Перечень пользователей Basic Auth, имеющих доступ к административным функциям
 	 */
 
-	$_adminUsers = [''];
+	$_adminUsers = ['123'];
 
 	$_phpUserName = $_SERVER['PHP_AUTH_USER'];
 
